@@ -1,0 +1,9 @@
+<div class="modal-header">
+  <h4 class="modal-title">User</h4>
+  <button type="button" class="close" aria-label="Close" (click)="onClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <app-user-form (submit)="onSubmit($event)"></app-user-form>
+</div>
