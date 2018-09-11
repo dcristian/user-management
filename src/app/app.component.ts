@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { User } from './models/user';
 import { constants } from './constants';
-import {ConfirmationModalComponent} from './components/confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private toastr: ToastrService
   ) {}
 
   async ngOnInit() {
@@ -39,7 +41,11 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    await this.userService.post(data);
+    let response = await this.userService.post(data);
+    this.toastr.success(response.messages.success, '', {
+      closeButton: true,
+      tapToDismiss: false
+    });
     await this.loadUsers();
   }
 
@@ -69,7 +75,11 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    await this.userService.put(data.id, data);
+    let response = await this.userService.put(data.id, data);
+    this.toastr.success(response.messages.success, '', {
+      closeButton: true,
+      tapToDismiss: false
+    });
     await this.loadUsers();
   }
 
@@ -86,7 +96,11 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    await this.userService.delete(user.id);
+    let response = await this.userService.delete(user.id);
+    this.toastr.success(response.messages.success, '', {
+      closeButton: true,
+      tapToDismiss: false
+    });
     await this.loadUsers();
   }
 }
