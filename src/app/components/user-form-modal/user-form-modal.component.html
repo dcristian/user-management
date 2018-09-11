@@ -1,5 +1,6 @@
 <div class="modal-header">
-  <h4 class="modal-title">User</h4>
+  <h4 class="modal-title" *ngIf="!editMode">Create user</h4>
+  <h4 class="modal-title" *ngIf="editMode">Edit user</h4>
   <button type="button" class="close" aria-label="Close" (click)="onClose()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -8,44 +9,61 @@
 <div [formGroup]="form">
   <div class="modal-body">
     <div class="form-group row">
-      <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstname" placeholder="Enter first name"
+      <label for="firstName" class="col-sm-3 col-form-label">First Name</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name"
+               formControlName="firstname"
         >
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="lastName" name="lastname" formControlName="lastname" placeholder="Enter last name"
-        >
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for="email" class="col-sm-2 col-form-label">Email</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="email" name="email" formControlName="email" placeholder="Enter email">
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label for="Birthdate" class="col-sm-2 col-form-label">Birthdate</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input class="form-control" placeholder="yyyy-mm-dd" id="Birthdate"
-                 name="birthday" formControlName="birthdate" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()"
-                 [minDate]="minBirthDate"
-                 [maxDate]="maxBirthDate"
-          >
+        <div class="invalid-feedback" *ngIf="firstname.touched && !firstname.valid">
+          <div *ngIf="firstname.hasError('required')">Please provide a first name.</div>
         </div>
       </div>
     </div>
 
     <div class="form-group row">
-      <div class="col-sm-2">Active</div>
-      <div class="col-sm-10">
+      <label for="lastName" class="col-sm-3 col-form-label">Last Name</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="lastName" name="lastname" placeholder="Enter last name"
+               formControlName="lastname"
+        >
+        <div class="invalid-feedback" *ngIf="lastname.touched && !lastname.valid">
+          <div *ngIf="lastname.hasError('required')">Please provide a last name.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="email" class="col-sm-3 col-form-label">Email</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="email" name="email" placeholder="Enter email"
+               formControlName="email"
+        >
+        <div class="invalid-feedback" *ngIf="email.touched && !email.valid">
+          <div *ngIf="email.hasError('required')">Please provide an email.</div>
+          <div *ngIf="email.hasError('email')">Please provide a valid email.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="Birthdate" class="col-sm-3 col-form-label">Birthdate</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <input class="form-control" placeholder="yyyy-mm-dd" id="Birthdate" name="birthday"
+                 ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" [minDate]="minBirthDate" [maxDate]="maxBirthDate"
+                 formControlName="birthdate"
+          >
+          <div class="invalid-feedback" *ngIf="birthdate.touched && !birthdate.valid">
+            <div *ngIf="birthdate.hasError('required')">Please provide a birthdate.</div>
+            <div *ngIf="birthdate.hasError('ngbDate')">Please provide a valid birthdate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-3">Active</div>
+      <div class="col-sm-9">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="active" name="active" formControlName="active">
         </div>
@@ -53,8 +71,8 @@
     </div>
 
     <div class="form-group row">
-      <div class="col-sm-2">Permission</div>
-      <div class="col-sm-10">
+      <div class="col-sm-3">Permission</div>
+      <div class="col-sm-9">
         <div class="form-check" formArrayName="permissions" *ngFor="let permission of form.get('permissions').controls; let i = index">
           <label class="form-check-label">
             <input class="form-check-input" type="checkbox" [formControlName]="i">
@@ -65,7 +83,13 @@
     </div>
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer" *ngIf="!editMode">
+    <button type="button" class="btn btn-danger" (click)="onReset()">Reset</button>
     <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+  </div>
+
+  <div class="modal-footer" *ngIf="editMode">
+    <button type="button" class="btn btn-danger" (click)="onClose()">Cancel</button>
+    <button type="button" class="btn btn-warning" (click)="onSubmit()">Update</button>
   </div>
 </div>

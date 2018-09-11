@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 import { User } from '../../models/user';
@@ -12,6 +12,7 @@ import { constants } from '../../constants';
 })
 export class UserFormModalComponent implements OnInit {
   @Input() user: User = new User();
+  @Input() editMode = false;
 
   form: FormGroup;
   permissions = constants.USER_PERMISSIONS;
@@ -67,16 +68,19 @@ export class UserFormModalComponent implements OnInit {
   getMaxBirthDate(): NgbDate {
     let today = moment();
 
-    return new NgbDate(today.year(), today.month(), today.day());
+    return new NgbDate(today.year(), today.month() + 1, today.day());
   }
 
   onClose() {
     this.activeModal.close();
   }
 
-  onSubmit(result: User) {
+  onReset() {
+    this.form.reset();
+  }
+
+  onSubmit() {
     if (!this.form.valid) {
-      console.log(this.form);
       return;
     }
 
@@ -97,6 +101,22 @@ export class UserFormModalComponent implements OnInit {
     user.active = this.form.get('active').value.toString();
     user.permissions = permissions;
 
-    this.activeModal.close(result);
+    this.activeModal.close(user);
+  }
+
+  get firstname(): AbstractControl {
+    return this.form.get('firstname');
+  }
+
+  get lastname(): AbstractControl {
+    return this.form.get('lastname');
+  }
+
+  get email(): AbstractControl {
+    return this.form.get('email');
+  }
+
+  get birthdate(): AbstractControl {
+    return this.form.get('birthdate');
   }
 }

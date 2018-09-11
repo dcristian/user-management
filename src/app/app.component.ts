@@ -32,8 +32,7 @@ export class AppComponent implements OnInit {
   async addNewUser(): Promise<void> {
     let data = await this.modalService.open(UserFormModalComponent, {
       keyboard: false,
-      backdrop: 'static',
-      size: 'lg'
+      backdrop: 'static'
     }).result;
 
     if (!data) {
@@ -60,10 +59,10 @@ export class AppComponent implements OnInit {
   async onEdit(user: User) {
     const modal = this.modalService.open(UserFormModalComponent, {
       keyboard: false,
-      backdrop: 'static',
-      size: 'lg'
+      backdrop: 'static'
     });
     modal.componentInstance.user = user;
+    modal.componentInstance.editMode = true;
 
     let data = await modal.result;
     if (!data) {
