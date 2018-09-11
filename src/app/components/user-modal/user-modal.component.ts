@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../models/user';
 
@@ -7,6 +7,8 @@ import { User } from '../../models/user';
   templateUrl: './user-modal.component.html'
 })
 export class UserModalComponent {
+  @Input() user: User = new User();
+
   constructor(
     private activeModal: NgbActiveModal
   ) { }

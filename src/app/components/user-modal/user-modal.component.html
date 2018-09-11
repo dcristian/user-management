@@ -5,5 +5,5 @@
   </button>
 </div>
 <div class="modal-body">
-  <app-user-form (submit)="onSubmit($event)"></app-user-form>
+  <app-user-form [user]="user" (submit)="onSubmit($event)"></app-user-form>
 </div>

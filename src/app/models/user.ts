@@ -5,5 +5,5 @@ export class User {
   email = '';
   birthdate = '';
   active = 'false';
-  permissions: {};
+  permissions = {};
 }

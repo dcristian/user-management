@@ -5,6 +5,7 @@ import { UserService } from './services/user.service';
 import { UserModalComponent } from './components/user-modal/user-modal.component';
 import { User } from './models/user';
 import { constants } from './constants';
+import {ConfirmationModalComponent} from './components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,6 @@ export class AppComponent implements OnInit {
 
   async loadUsers(): Promise<void> {
     this.users = await this.userService.getAll();
-    console.log(this.users);
   }
 
   async addNewUser(): Promise<void> {
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    await this.userService.create(data);
+    await this.userService.post(data);
     await this.loadUsers();
   }
 
@@ -55,5 +55,39 @@ export class AppComponent implements OnInit {
     }
 
     return permissions.join(', ');
+  }
+
+  async onEdit(user: User) {
+    const modal = this.modalService.open(UserModalComponent, {
+      keyboard: false,
+      backdrop: 'static',
+      size: 'lg'
+    });
+    modal.componentInstance.user = user;
+
+    let data = await modal.result;
+    if (!data) {
+      return;
+    }
+
+    await this.userService.put(data.id, data);
+    await this.loadUsers();
+  }
+
+  async onDelete(user: User) {
+    const modal = this.modalService.open(ConfirmationModalComponent, {
+      keyboard: false,
+      backdrop: 'static'
+    });
+    modal.componentInstance.title = 'Delete confirmation';
+    modal.componentInstance.message = 'Are you sure you want to delete this user?';
+
+    let result = await modal.result;
+    if (!result) {
+      return;
+    }
+
+    await this.userService.delete(user.id);
+    await this.loadUsers();
   }
 }

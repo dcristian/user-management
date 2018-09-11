@@ -27,9 +27,21 @@ export class UserService {
       .toPromise();
   }
 
-  create(data: User): Promise<any> {
+  post(data: User): Promise<any> {
     return this.http
       .post('/table/create/user', data)
+      .toPromise();
+  }
+
+  put(id: string, data): Promise<any> {
+    return this.http
+      .put(`/table/update/user/${id}`, data)
+      .toPromise();
+  }
+
+  delete(id: string): Promise<any> {
+    return this.http
+      .delete(`/table/delete/user/${id}`)
       .toPromise();
   }
 }

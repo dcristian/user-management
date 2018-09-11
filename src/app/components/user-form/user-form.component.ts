@@ -24,7 +24,15 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const permissions = this.permissions.map(() => this.formBuilder.control(false));
+    const permissions = this.permissions.map((permission) => {
+      const hasPermission = this.user.permissions[permission.value] === 'true';
+      return this.formBuilder.control(hasPermission);
+    });
+    let birthdate = null;
+    if (this.user.birthdate) {
+      let momentObj = moment(this.user.birthdate, 'YYYY-MM-DD');
+      birthdate = new NgbDate(momentObj.year(), momentObj.month() + 1, momentObj.date());
+    }
 
     this.form = this.formBuilder.group({
       'firstname': [
@@ -36,22 +44,24 @@ export class UserFormComponent implements OnInit {
         Validators.required
       ],
       'email': [
-        this.user.email,
+        this.user.email.trim(),
         [
           Validators.required,
           Validators.email
         ]
       ],
       'birthdate': [
-        this.user.birthdate,
+        '',
         Validators.required
       ],
       'active': [
-        this.user.birthdate || false,
+        this.user.active === 'true',
         Validators.required
       ],
       'permissions': this.formBuilder.array(permissions)
     });
+
+    this.form.get('birthdate').patchValue(birthdate);
   }
 
   getMaxBirthDate(): NgbDate {
@@ -62,19 +72,23 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
     if (!this.form.valid) {
+      console.log(this.form);
       return;
     }
 
-    let birthdate = moment(this.form.get('birthdate').value).format('YYYY-MM-DD');
+    let birthDateValue = this.form.get('birthdate').value;
+    birthDateValue.month -= 1;
+    let birthdate = moment(birthDateValue).format('YYYY-MM-DD');
     let permissions = {};
     this.form.get('permissions').value.map((value, i) => {
       permissions[this.permissions[i].value] = value.toString();
     });
 
     let user = new User();
+    user.id = this.user.id;
     user.firstname = this.form.get('firstname').value;
     user.lastname = this.form.get('lastname').value;
-    user.email = this.form.get('email').value;
+    user.email = this.form.get('email').value.trim();
     user.birthdate = birthdate;
     user.active = this.form.get('active').value.toString();
     user.permissions = permissions;

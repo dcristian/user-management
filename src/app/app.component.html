@@ -15,6 +15,7 @@
         <th scope="col">Birthday</th>
         <th scope="col">Active</th>
         <th scope="col">Permissions</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -24,8 +25,17 @@
         <td>{{ user.lastname }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.birthdate }}</td>
-        <td>{{ user.active ? 'Active' : 'Inactive' }}</td>
+        <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
         <td>{{ getUserPermissions(user) }}</td>
+        <td>
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Action</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item" (click)="onEdit(user)">Edit</button>
+              <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
+            </div>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { UserService } from './services/user.service';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { UserModalComponent } from './components/user-modal/user-modal.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserFormComponent,
-    UserModalComponent
+    UserModalComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,10 @@ import { UserModalComponent } from './components/user-modal/user-modal.component
   providers: [
     UserService
   ],
-  entryComponents: [UserModalComponent],
+  entryComponents: [
+    UserModalComponent,
+    ConfirmationModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
