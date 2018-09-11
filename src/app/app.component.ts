@@ -75,6 +75,18 @@ export class AppComponent implements OnInit {
       return;
     }
 
+    const confirmationModal = this.modalService.open(ConfirmationModalComponent, {
+      keyboard: false,
+      backdrop: 'static'
+    });
+    confirmationModal.componentInstance.title = 'Update confirmation';
+    confirmationModal.componentInstance.message = 'Are you sure you want to update this user?';
+
+    let result = await confirmationModal.result;
+    if (!result) {
+      return;
+    }
+
     let response = await this.userService.put(data.id, data);
     this.toastr.success(response.messages.success, '', {
       closeButton: true,
