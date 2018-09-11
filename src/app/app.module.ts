@@ -6,15 +6,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { UserService } from './services/user.service';
-import { UserFormComponent } from './components/user-form/user-form.component';
-import { UserModalComponent } from './components/user-modal/user-modal.component';
+import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserFormComponent,
-    UserModalComponent,
+    UserFormModalComponent,
     ConfirmationModalComponent
   ],
   imports: [
@@ -28,7 +26,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     UserService
   ],
   entryComponents: [
-    UserModalComponent,
+    UserFormModalComponent,
     ConfirmationModalComponent
   ],
   bootstrap: [AppComponent]

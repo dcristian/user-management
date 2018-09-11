@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { UserService } from './services/user.service';
-import { UserModalComponent } from './components/user-modal/user-modal.component';
+import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { User } from './models/user';
 import { constants } from './constants';
 import {ConfirmationModalComponent} from './components/confirmation-modal/confirmation-modal.component';
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   }
 
   async addNewUser(): Promise<void> {
-    let data = await this.modalService.open(UserModalComponent, {
+    let data = await this.modalService.open(UserFormModalComponent, {
       keyboard: false,
       backdrop: 'static',
       size: 'lg'
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
   }
 
   async onEdit(user: User) {
-    const modal = this.modalService.open(UserModalComponent, {
+    const modal = this.modalService.open(UserFormModalComponent, {
       keyboard: false,
       backdrop: 'static',
       size: 'lg'

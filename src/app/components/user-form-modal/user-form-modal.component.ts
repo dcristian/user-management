@@ -1,18 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgbActiveModal, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
-import { constants } from '../../constants';
 import { User } from '../../models/user';
+import { constants } from '../../constants';
 
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html'
+  selector: 'app-user-modal',
+  templateUrl: './user-form-modal.component.html'
 })
-export class UserFormComponent implements OnInit {
+export class UserFormModalComponent implements OnInit {
   @Input() user: User = new User();
-  @Output() submit = new EventEmitter();
 
   form: FormGroup;
   permissions = constants.USER_PERMISSIONS;
@@ -20,8 +19,9 @@ export class UserFormComponent implements OnInit {
   maxBirthDate: NgbDate = this.getMaxBirthDate();
 
   constructor(
+    private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     const permissions = this.permissions.map((permission) => {
@@ -70,7 +70,11 @@ export class UserFormComponent implements OnInit {
     return new NgbDate(today.year(), today.month(), today.day());
   }
 
-  onSubmit() {
+  onClose() {
+    this.activeModal.close();
+  }
+
+  onSubmit(result: User) {
     if (!this.form.valid) {
       console.log(this.form);
       return;
@@ -93,6 +97,6 @@ export class UserFormComponent implements OnInit {
     user.active = this.form.get('active').value.toString();
     user.permissions = permissions;
 
-    this.submit.emit(user);
+    this.activeModal.close(result);
   }
 }
