@@ -5,39 +5,6 @@
 
   <button class="btn btn-success mb-3" (click)="addNewUser()">Add new user</button>
 
-  <table class="table table-bordered">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Birthday</th>
-        <th scope="col">Active</th>
-        <th scope="col">Permissions</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users; let i = index">
-        <th scope="row">{{ i + 1 }}</th>
-        <td>{{ user.firstname }}</td>
-        <td>{{ user.lastname }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.birthdate }}</td>
-        <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
-        <td>{{ getUserPermissions(user) }}</td>
-        <td>
-          <div ngbDropdown class="d-inline-block">
-            <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownActions">
-              <button class="dropdown-item" (click)="onEdit(user)">Edit</button>
-              <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <user-list [users]="users" (edit)="onEdit($event)" (delete)="onDelete($event)"></user-list>
 </div>
 

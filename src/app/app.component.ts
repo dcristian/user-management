@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { User } from './models/user';
-import { constants } from './constants';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -15,7 +14,6 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 })
 export class AppComponent implements OnInit {
   users: User[] = [];
-  permissions = constants.PERMISSIONS;
 
   constructor(
     private userService: UserService,
@@ -76,13 +74,6 @@ export class AppComponent implements OnInit {
     this.displaySuccessNotification(response.messages.success);
 
     await this.loadUsers();
-  }
-
-  getUserPermissions(user: User): string {
-    return Object.keys(user.permissions)
-      .filter((p) => user.permissions[p] === 'true')
-      .map((p) => this.permissions[p])
-      .join(', ');
   }
 
   private async openUserFormModal(user: User, editMode = false): Promise<User> {

@@ -7,7 +7,7 @@ import { User } from '../../models/user';
 import { constants } from '../../constants';
 
 @Component({
-  selector: 'app-user-modal',
+  selector: 'user-modal',
   templateUrl: './user-form-modal.component.html',
   providers: [{
     provide: NgbDateAdapter,

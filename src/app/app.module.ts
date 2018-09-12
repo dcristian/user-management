@@ -10,12 +10,14 @@ import { AppComponent } from './app.component';
 import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserFormModalComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
