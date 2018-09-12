@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { User } from '../models/user';
-
+import { UserList } from '../models/user-list';
+import { ActionResponse } from '../models/action-response';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,9 @@ export class UserService {
 
   getAll(): Promise<User[]> {
     return this.http
-      .get<any>('/table/users')
+      .get<UserList>('/table/users')
       .pipe(
-        map((result) => {
+        map((result: UserList) => {
           return Object.values(result.rows).map((row) => {
             return Object.assign(new User(), row);
           });
@@ -27,21 +28,21 @@ export class UserService {
       .toPromise();
   }
 
-  post(data: User): Promise<any> {
+  post(data: User): Promise<ActionResponse> {
     return this.http
-      .post('/table/create/user', data)
+      .post<ActionResponse>('/table/create/user', data)
       .toPromise();
   }
 
-  put(id: string, data): Promise<any> {
+  put(id: string, data: User): Promise<ActionResponse> {
     return this.http
-      .put(`/table/update/user/${id}`, data)
+      .put<ActionResponse>(`/table/update/user/${id}`, data)
       .toPromise();
   }
 
-  delete(id: string): Promise<any> {
+  delete(id: string): Promise<ActionResponse> {
     return this.http
-      .delete(`/table/delete/user/${id}`)
+      .delete<ActionResponse>(`/table/delete/user/${id}`)
       .toPromise();
   }
 }

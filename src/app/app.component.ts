@@ -15,7 +15,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 })
 export class AppComponent implements OnInit {
   users: User[] = [];
-  permissions = constants.USER_PERMISSIONS;
+  permissions = constants.PERMISSIONS;
 
   constructor(
     private userService: UserService,
@@ -32,87 +32,85 @@ export class AppComponent implements OnInit {
   }
 
   async addNewUser(): Promise<void> {
-    let data = await this.modalService.open(UserFormModalComponent, {
-      keyboard: false,
-      backdrop: 'static'
-    }).result;
-
+    let data = await this.openUserFormModal(new User());
     if (!data) {
       return;
     }
 
     let response = await this.userService.post(data);
-    this.toastr.success(response.messages.success, '', {
-      closeButton: true,
-      tapToDismiss: false
-    });
+    this.displaySuccessNotification(response.messages.success);
+
     await this.loadUsers();
   }
 
-  getUserPermissions(user: User) {
-    let permissions = [];
-    for (let p in user.permissions) {
-      if (!user.permissions.hasOwnProperty(p) || user.permissions[p] !== 'true') {
-        continue;
-      }
-
-      permissions.push(this.permissions.find((perm) => perm.value === p).name);
-    }
-
-    return permissions.join(', ');
-  }
-
-  async onEdit(user: User) {
-    const modal = this.modalService.open(UserFormModalComponent, {
-      keyboard: false,
-      backdrop: 'static'
-    });
-    modal.componentInstance.user = user;
-    modal.componentInstance.editMode = true;
-
-    let data = await modal.result;
+  async onEdit(user: User): Promise<void> {
+    let data = await this.openUserFormModal(user, true);
     if (!data) {
       return;
     }
 
-    const confirmationModal = this.modalService.open(ConfirmationModalComponent, {
-      keyboard: false,
-      backdrop: 'static'
-    });
-    confirmationModal.componentInstance.title = 'Update confirmation';
-    confirmationModal.componentInstance.message = 'Are you sure you want to update this user?';
+    let title = 'Update confirmation';
+    let message = 'Are you sure you want to update this user?';
 
-    let result = await confirmationModal.result;
+    let result = await this.openConfirmationModal(title, message);
     if (!result) {
       return;
     }
 
     let response = await this.userService.put(data.id, data);
-    this.toastr.success(response.messages.success, '', {
-      closeButton: true,
-      tapToDismiss: false
-    });
+    this.displaySuccessNotification(response.messages.success);
+
     await this.loadUsers();
   }
 
-  async onDelete(user: User) {
-    const modal = this.modalService.open(ConfirmationModalComponent, {
-      keyboard: false,
-      backdrop: 'static'
-    });
-    modal.componentInstance.title = 'Delete confirmation';
-    modal.componentInstance.message = 'Are you sure you want to delete this user?';
+  async onDelete(user: User): Promise<void> {
+    let title = 'Delete confirmation';
+    let message = 'Are you sure you want to delete this user?';
 
-    let result = await modal.result;
+    let result = await this.openConfirmationModal(title, message);
     if (!result) {
       return;
     }
 
     let response = await this.userService.delete(user.id);
-    this.toastr.success(response.messages.success, '', {
+    this.displaySuccessNotification(response.messages.success);
+
+    await this.loadUsers();
+  }
+
+  getUserPermissions(user: User): string {
+    return Object.keys(user.permissions)
+      .filter((p) => user.permissions[p] === 'true')
+      .map((p) => this.permissions[p])
+      .join(', ');
+  }
+
+  private async openUserFormModal(user: User, editMode = false): Promise<User> {
+    const modal = this.modalService.open(UserFormModalComponent, {
+      keyboard: false,
+      backdrop: 'static'
+    });
+    modal.componentInstance.user = user;
+    modal.componentInstance.editMode = editMode;
+
+    return await modal.result;
+  }
+
+  private async openConfirmationModal(title, message): Promise<boolean> {
+    const modal = this.modalService.open(ConfirmationModalComponent, {
+      keyboard: false,
+      backdrop: 'static'
+    });
+    modal.componentInstance.title = title;
+    modal.componentInstance.message = message;
+
+    return await modal.result;
+  }
+
+  private displaySuccessNotification(message): void {
+    this.toastr.success(message, '', {
       closeButton: true,
       tapToDismiss: false
     });
-    await this.loadUsers();
   }
 }

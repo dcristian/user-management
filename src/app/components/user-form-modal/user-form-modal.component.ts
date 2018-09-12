@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDate, NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -8,14 +8,19 @@ import { constants } from '../../constants';
 
 @Component({
   selector: 'app-user-modal',
-  templateUrl: './user-form-modal.component.html'
+  templateUrl: './user-form-modal.component.html',
+  providers: [{
+    provide: NgbDateAdapter,
+    useClass: NgbDateNativeAdapter
+  }]
 })
 export class UserFormModalComponent implements OnInit {
   @Input() user: User = new User();
   @Input() editMode = false;
 
   form: FormGroup;
-  permissions = constants.USER_PERMISSIONS;
+  permissionValues = Object.keys(constants.PERMISSIONS);
+  permissionNames = Object.values(constants.PERMISSIONS);
   minBirthDate: NgbDate = new NgbDate(1900, 1, 1);
   maxBirthDate: NgbDate = this.getMaxBirthDate();
 
@@ -25,83 +30,7 @@ export class UserFormModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const permissions = this.permissions.map((permission) => {
-      const hasPermission = this.user.permissions[permission.value] === 'true';
-      return this.formBuilder.control(hasPermission);
-    });
-    let birthdate = null;
-    if (this.user.birthdate) {
-      let momentObj = moment(this.user.birthdate, 'YYYY-MM-DD');
-      birthdate = new NgbDate(momentObj.year(), momentObj.month() + 1, momentObj.date());
-    }
-
-    this.form = this.formBuilder.group({
-      'firstname': [
-        this.user.firstname,
-        Validators.required
-      ],
-      'lastname': [
-        this.user.lastname,
-        Validators.required
-      ],
-      'email': [
-        this.user.email.trim(),
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-      'birthdate': [
-        '',
-        Validators.required
-      ],
-      'active': [
-        this.user.active === 'true',
-        Validators.required
-      ],
-      'permissions': this.formBuilder.array(permissions)
-    });
-
-    this.form.get('birthdate').patchValue(birthdate);
-  }
-
-  getMaxBirthDate(): NgbDate {
-    let today = moment();
-
-    return new NgbDate(today.year(), today.month() + 1, today.day());
-  }
-
-  onClose() {
-    this.activeModal.close();
-  }
-
-  onReset() {
-    this.form.reset();
-  }
-
-  onSubmit() {
-    if (!this.form.valid) {
-      return;
-    }
-
-    let birthDateValue = this.form.get('birthdate').value;
-    birthDateValue.month -= 1;
-    let birthdate = moment(birthDateValue).format('YYYY-MM-DD');
-    let permissions = {};
-    this.form.get('permissions').value.map((value, i) => {
-      permissions[this.permissions[i].value] = value.toString();
-    });
-
-    let user = new User();
-    user.id = this.user.id;
-    user.firstname = this.form.get('firstname').value;
-    user.lastname = this.form.get('lastname').value;
-    user.email = this.form.get('email').value.trim();
-    user.birthdate = birthdate;
-    user.active = this.form.get('active').value.toString();
-    user.permissions = permissions;
-
-    this.activeModal.close(user);
+    this.buildForm();
   }
 
   get firstname(): AbstractControl {
@@ -118,5 +47,80 @@ export class UserFormModalComponent implements OnInit {
 
   get birthdate(): AbstractControl {
     return this.form.get('birthdate');
+  }
+
+  onClose() {
+    this.activeModal.close();
+  }
+
+  onReset() {
+    this.form.reset();
+  }
+
+  onSubmit() {
+    if (!this.form.valid) {
+      return;
+    }
+
+    const user = this.createUserByForm();
+
+    this.activeModal.close(user);
+  }
+
+  private getMaxBirthDate(): NgbDate {
+    let today = new Date();
+
+    return new NgbDate(today.getFullYear(), today.getMonth() + 1, today.getDay());
+  }
+
+  private buildForm(): void {
+    const permissions = this.permissionValues.map((value) =>  {
+      return this.formBuilder.control(this.user.permissions[value] === 'true');
+    });
+
+    this.form = this.formBuilder.group({
+      'firstname': [
+        this.user.firstname.trim(),
+        Validators.required
+      ],
+      'lastname': [
+        this.user.lastname.trim(),
+        Validators.required
+      ],
+      'email': [
+        this.user.email.trim(),
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+      'birthdate': [
+        new Date(this.user.birthdate),
+        Validators.required
+      ],
+      'active': [
+        this.user.active === 'true',
+        Validators.required
+      ],
+      'permissions': this.formBuilder.array(permissions)
+    });
+  }
+
+  private createUserByForm(): User {
+    let userPermissions = {};
+    this.form.get('permissions').value.map((value, i) => {
+      userPermissions[this.permissionValues[i]] = value.toString();
+    });
+
+    let user = new User();
+    user.id = this.user.id;
+    user.firstname = this.form.get('firstname').value.trim();
+    user.lastname = this.form.get('lastname').value.trim();
+    user.email = this.form.get('email').value.trim();
+    user.birthdate = moment(this.form.get('birthdate').value).format('YYYY-MM-DD');
+    user.active = this.form.get('active').value.toString();
+    user.permissions = userPermissions;
+
+    return user;
   }
 }
