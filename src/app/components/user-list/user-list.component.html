@@ -1,11 +1,34 @@
 <div>
-  <label class="form-inline">
-    Show&nbsp;
-    <select class="form-control" [(ngModel)]="pageSize" (change)="onMaxSizeChange()">
-      <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
-    </select>
-    &nbsp;Entries
-  </label>
+  <div class="row">
+    <div class="col-6">
+      <label class="form-inline">
+        Show&nbsp;
+        <select class="form-control" [(ngModel)]="pageSize" (change)="onMaxSizeChange()">
+          <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
+        </select>
+        &nbsp;Entries
+      </label>
+    </div>
+
+    <div class="col-3">
+      <input type="text" class="form-control mb-3" placeholder="Search by email"
+             [(ngModel)]="searchBox"
+             (keyup)="searchByEmail()"
+      >
+    </div>
+
+    <div class="col-3 input-group mb-3">
+      <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="status" (change)="onStatusChange()">
+        <option value="">Choose...</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+      <div class="input-group-append">
+        <label class="input-group-text" for="inputGroupSelect01">Status</label>
+      </div>
+    </div>
+  </div>
+
 
   <table class="table table-bordered">
     <thead class="thead-light">
@@ -15,7 +38,7 @@
         <th scope="col">Last Name</th>
         <th scope="col">Email</th>
         <th scope="col">Birthday</th>
-        <th scope="col">Active</th>
+        <th scope="col">Status</th>
         <th scope="col">Permissions</th>
         <th scope="col">Actions</th>
       </tr>
@@ -43,5 +66,5 @@
     </tbody>
   </table>
 
-  <ngb-pagination [collectionSize]="users.length" [(page)]="pageNumber" [pageSize]="pageSize" (pageChange)="onPageChange()" [boundaryLinks]="true"></ngb-pagination>
+  <ngb-pagination class="d-flex justify-content-end" [collectionSize]="filteredUsers.length" [(page)]="pageNumber" [pageSize]="pageSize" (pageChange)="onPageChange()"></ngb-pagination>
 </div>

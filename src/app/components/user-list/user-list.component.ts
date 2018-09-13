@@ -14,19 +14,24 @@ export class UserListComponent implements OnInit, OnChanges {
   @Output() editUserPermissions = new EventEmitter();
   @Output() delete = new EventEmitter();
 
+  filteredUsers: User[];
   permissions = constants.PERMISSIONS;
   tableSizes = [10, 25, 50, 100];
   pages = [];
   currentPage: User[] = [];
   pageSize = this.tableSizes[0];
   pageNumber = 1;
+  searchBox = '';
+  status = '';
 
   ngOnInit() {
+    this.filteredUsers = this.users;
     this.setPages();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['users']) {
+      this.filteredUsers = this.users;
       this.setPages();
     }
   }
@@ -59,7 +64,21 @@ export class UserListComponent implements OnInit, OnChanges {
   }
 
   setPages(): void {
-    this.pages = _.chunk(this.users, this.pageSize);
+    this.pages = _.chunk(this.filteredUsers, this.pageSize);
     this.currentPage = this.pages[this.pageNumber - 1];
+  }
+
+  searchByEmail() {
+    this.filteredUsers = this.users.filter((user) => {
+      return _.includes(user.email, this.searchBox);
+    });
+    this.setPages();
+  }
+
+  onStatusChange() {
+    this.filteredUsers = this.users.filter((user) => {
+      return !this.status || user.active === this.status.toString();
+    });
+    this.setPages();
   }
 }
