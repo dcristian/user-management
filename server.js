@@ -1,5 +1,5 @@
 var host = "127.0.0.1";
-var port = 8080;
+var port = process.env.PORT || 8080;
 
 var express = require("express");
 var fs = require('fs');
@@ -112,11 +112,15 @@ app.delete('/table/delete/user/:id', function (req, res) {
     });
 });
 
-app.listen(port, host);
+app.listen(port, () => {
+  console.log(`Started on port ${port}.`);
+});
 
-console.log('Running server at http://' + host + ':' + port + '/');
-var opn = require('opn');
+if (!process.env.HEROKU) {
+  console.log('Running server at http://' + host + ':' + port + '/');
+  var opn = require('opn');
 
 // opens the url in the default browser
 // opn('http://' + host + ':' + port + '#TmljJ3MgdGVzdA==');
-opn('http://' + host + ':' + port);
+  opn('http://' + host + ':' + port);
+}
