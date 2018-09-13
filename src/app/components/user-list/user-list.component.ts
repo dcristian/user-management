@@ -26,14 +26,12 @@ export class UserListComponent implements OnInit, OnChanges {
   status = '';
 
   ngOnInit() {
-    this.filteredUsers = this.users;
-    this.setPages();
+    this.calculateCurrentPage();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['users']) {
-      this.filteredUsers = this.users;
-      this.setPages();
+      this.calculateCurrentPage();
     }
   }
 
@@ -50,7 +48,7 @@ export class UserListComponent implements OnInit, OnChanges {
   }
 
   onMaxSizeChange() {
-    this.setPages();
+    this.calculateCurrentPage();
   }
 
   onPageChange() {
@@ -64,22 +62,25 @@ export class UserListComponent implements OnInit, OnChanges {
       .join(', ');
   }
 
-  setPages(): void {
-    this.pages = _.chunk(this.filteredUsers, this.pageSize);
-    this.currentPage = this.pages[this.pageNumber - 1];
-  }
-
   searchByEmail() {
-    this.filteredUsers = this.users.filter((user) => {
-      return _.includes(user.email, this.searchBox);
-    });
-    this.setPages();
+    this.calculateCurrentPage();
   }
 
   onStatusChange() {
+    this.calculateCurrentPage();
+  }
+
+  calculateCurrentPage(): void {
+    // apply the filters
     this.filteredUsers = this.users.filter((user) => {
-      return !this.status || user.active === this.status.toString();
+      return (!this.searchBox || _.includes(user.email, this.searchBox))
+        && (!this.status || user.active === this.status.toString());
     });
-    this.setPages();
+
+    // split the list into pages
+    this.pages = _.chunk(this.filteredUsers, this.pageSize);
+
+    // get the current page
+    this.currentPage = this.pages[this.pageNumber - 1];
   }
 }

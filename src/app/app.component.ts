@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 
+import { User } from './models/user';
 import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
-import { User } from './models/user';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
-import {UserPermissionsFormModalComponent} from './components/user-permissions-form-modal/user-permissions-form-modal.component';
+import { UserPermissionsFormModalComponent } from './components/user-permissions-form-modal/user-permissions-form-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -36,10 +36,13 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    let response = await this.userService.post(data);
-    this.displaySuccessNotification(response.messages.success);
-
-    await this.loadUsers();
+    try {
+      let response = await this.userService.post(data);
+      this.displaySuccessNotification(response.messages.success);
+      await this.loadUsers();
+    } catch (error) {
+      this.displayErrorNotification();
+    }
   }
 
   async onEditUser(user: User): Promise<void> {
@@ -56,14 +59,17 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    let response = await this.userService.put(data.id, data);
-    this.displaySuccessNotification(response.messages.success);
-
-    await this.loadUsers();
+    try {
+      let response = await this.userService.put(data.id, data);
+      this.displaySuccessNotification(response.messages.success);
+      await this.loadUsers();
+    } catch (error) {
+      this.displayErrorNotification();
+    }
   }
 
   async onEditUserPermissions(user: User): Promise<void> {
-    let data = await this.openUserPermissionsFormModal(user, true);
+    let data = await this.openUserPermissionsFormModal(user);
     if (!data) {
       return;
     }
@@ -76,10 +82,13 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    let response = await this.userService.put(data.id, data);
-    this.displaySuccessNotification(response.messages.success);
-
-    await this.loadUsers();
+    try {
+      let response = await this.userService.put(data.id, data);
+      this.displaySuccessNotification(response.messages.success);
+      await this.loadUsers();
+    } catch (error) {
+      this.displayErrorNotification();
+    }
   }
 
   async onDelete(user: User): Promise<void> {
@@ -91,10 +100,13 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    let response = await this.userService.delete(user.id);
-    this.displaySuccessNotification(response.messages.success);
-
-    await this.loadUsers();
+    try {
+      let response = await this.userService.delete(user.id);
+      this.displaySuccessNotification(response.messages.success);
+      await this.loadUsers();
+    } catch (error) {
+      this.displayErrorNotification();
+    }
   }
 
   private async openUserFormModal(user: User, editMode = false): Promise<User> {
@@ -108,7 +120,7 @@ export class AppComponent implements OnInit {
     return await modal.result;
   }
 
-  private async openUserPermissionsFormModal(user: User, editMode = false): Promise<User> {
+  private async openUserPermissionsFormModal(user: User): Promise<User> {
     const modal = this.modalService.open(UserPermissionsFormModalComponent, {
       keyboard: false,
       backdrop: 'static'
@@ -131,6 +143,13 @@ export class AppComponent implements OnInit {
 
   private displaySuccessNotification(message): void {
     this.toastr.success(message, '', {
+      closeButton: true,
+      tapToDismiss: false
+    });
+  }
+
+  private displayErrorNotification(): void {
+    this.toastr.error('Something went wrong', '', {
       closeButton: true,
       tapToDismiss: false
     });
