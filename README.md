@@ -1,10 +1,26 @@
-# UserManagement
+# User Management
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+An user management web app build with Angular 6.
 
-## Development server
+Try the demo at [angular-user-management.herokuapp.com](https://angular-user-management.herokuapp.com/ "Title")
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Quick Start
+
+#### Install Angular CLI
+
+``` shell
+$ npm install -g @angular/cli
+```
+
+#### Clone the app, install package dependencies, and start the dev server @ `http://127.0.0.1:8080/`
+
+``` shell
+$ git clone git@github.com:DCristian/user-management.git
+$ cd user-management
+$ npm install
+$ ng build
+$ node server.js
+```
 
 ## Code scaffolding
 
