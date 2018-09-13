@@ -7,6 +7,6 @@
     <button class="btn btn-success" (click)="addNewUser()">Add new user</button>
   </div>
 
-  <user-list [users]="users" (edit)="onEdit($event)" (delete)="onDelete($event)"></user-list>
+  <user-list [users]="users" (editUser)="onEditUser($event)" (editUserPermissions)="onEditUserPermissions($event)" (delete)="onDelete($event)"></user-list>
 </div>
 

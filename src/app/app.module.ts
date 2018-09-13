@@ -11,13 +11,15 @@ import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { UserListComponent } from './components/user-list/user-list.component';
+import { UserPermissionsFormModalComponent } from './components/user-permissions-form-modal/user-permissions-form-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserFormModalComponent,
     ConfirmationModalComponent,
-    UserListComponent
+    UserListComponent,
+    UserPermissionsFormModalComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { UserListComponent } from './components/user-list/user-list.component';
   ],
   entryComponents: [
     UserFormModalComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    UserPermissionsFormModalComponent
   ],
   bootstrap: [AppComponent]
 })

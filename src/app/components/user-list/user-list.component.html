@@ -33,7 +33,8 @@
           <div ngbDropdown class="d-inline-block">
             <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
             <div ngbDropdownMenu aria-labelledby="dropdownActions">
-              <button class="dropdown-item" (click)="onEdit(user)">Edit</button>
+              <button class="dropdown-item" (click)="onEditUser(user)">Edit user</button>
+              <button class="dropdown-item" (click)="onEditUserPermissions(user)">Edit user permissions</button>
               <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
             </div>
           </div>

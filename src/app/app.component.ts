@@ -6,6 +6,7 @@ import { UserService } from './services/user.service';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { User } from './models/user';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import {UserPermissionsFormModalComponent} from './components/user-permissions-form-modal/user-permissions-form-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,7 @@ export class AppComponent implements OnInit {
     await this.loadUsers();
   }
 
-  async onEdit(user: User): Promise<void> {
+  async onEditUser(user: User): Promise<void> {
     let data = await this.openUserFormModal(user, true);
     if (!data) {
       return;
@@ -49,6 +50,26 @@ export class AppComponent implements OnInit {
 
     let title = 'Update confirmation';
     let message = 'Are you sure you want to update this user?';
+
+    let result = await this.openConfirmationModal(title, message);
+    if (!result) {
+      return;
+    }
+
+    let response = await this.userService.put(data.id, data);
+    this.displaySuccessNotification(response.messages.success);
+
+    await this.loadUsers();
+  }
+
+  async onEditUserPermissions(user: User): Promise<void> {
+    let data = await this.openUserPermissionsFormModal(user, true);
+    if (!data) {
+      return;
+    }
+
+    let title = 'Update confirmation';
+    let message = 'Are you sure you want to update this user permissions?';
 
     let result = await this.openConfirmationModal(title, message);
     if (!result) {
@@ -83,6 +104,16 @@ export class AppComponent implements OnInit {
     });
     modal.componentInstance.user = user;
     modal.componentInstance.editMode = editMode;
+
+    return await modal.result;
+  }
+
+  private async openUserPermissionsFormModal(user: User, editMode = false): Promise<User> {
+    const modal = this.modalService.open(UserPermissionsFormModalComponent, {
+      keyboard: false,
+      backdrop: 'static'
+    });
+    modal.componentInstance.user = user;
 
     return await modal.result;
   }

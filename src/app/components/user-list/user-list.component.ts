@@ -10,7 +10,8 @@ import { constants } from '../../constants';
 })
 export class UserListComponent implements OnInit, OnChanges {
   @Input() users: User[];
-  @Output() edit = new EventEmitter();
+  @Output() editUser = new EventEmitter();
+  @Output() editUserPermissions = new EventEmitter();
   @Output() delete = new EventEmitter();
 
   permissions = constants.PERMISSIONS;
@@ -30,8 +31,12 @@ export class UserListComponent implements OnInit, OnChanges {
     }
   }
 
-  async onEdit(user: User): Promise<void> {
-    await this.edit.emit(user);
+  async onEditUser(user: User): Promise<void> {
+    await this.editUser.emit(user);
+  }
+
+  async onEditUserPermissions(user: User): Promise<void> {
+    await this.editUserPermissions.emit(user);
   }
 
   async onDelete(user: User): Promise<void> {
