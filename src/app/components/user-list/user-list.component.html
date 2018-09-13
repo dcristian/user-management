@@ -3,7 +3,10 @@
     <div class="col-md-6 col-sm-12">
       <label>
         Show
-        <select class="custom-select custom-select-sm form-control form-control-sm" [(ngModel)]="pageSize" (change)="onMaxSizeChange()">
+        <select class="custom-select custom-select-sm form-control form-control-sm"
+                [(ngModel)]="pageSize"
+                (change)="onMaxSizeChange()"
+        >
           <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
         </select>
         Entries
@@ -66,7 +69,7 @@
           <div ngbDropdown class="d-inline-block">
             <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
             <div ngbDropdownMenu aria-labelledby="dropdownActions">
-              <button class="dropdown-item" (click)="onEditUser(user)">Edit user</button>
+              <button class="dropdown-item" (click)="onModifyUser(user)">Modify user</button>
               <button class="dropdown-item" (click)="onEditUserPermissions(user)">Edit user permissions</button>
               <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
             </div>
@@ -76,5 +79,10 @@
     </tbody>
   </table>
 
-  <ngb-pagination class="d-flex justify-content-end" [collectionSize]="filteredUsers.length" [(page)]="pageNumber" [pageSize]="pageSize" (pageChange)="onPageChange()"></ngb-pagination>
+  <ngb-pagination class="d-flex justify-content-end"
+                  [collectionSize]="filteredUsers.length"
+                  [(page)]="pageNumber"
+                  [pageSize]="pageSize"
+                  (pageChange)="onPageChange()"
+  ></ngb-pagination>
 </div>

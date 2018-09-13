@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  async onEditUser(user: User): Promise<void> {
+  async onModifyUser(user: User): Promise<void> {
     let data = await this.openUserFormModal(user, true);
     if (!data) {
       return;

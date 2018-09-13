@@ -9,6 +9,10 @@
     </button>
   </div>
 
-  <user-list [users]="users" (editUser)="onEditUser($event)" (editUserPermissions)="onEditUserPermissions($event)" (delete)="onDelete($event)"></user-list>
+  <user-list [users]="users"
+             (modifyUser)="onModifyUser($event)"
+             (editUserPermissions)="onEditUserPermissions($event)"
+             (delete)="onDelete($event)"
+  ></user-list>
 </div>
 

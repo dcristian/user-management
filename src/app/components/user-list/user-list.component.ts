@@ -11,7 +11,7 @@ import { constants } from '../../constants';
 })
 export class UserListComponent implements OnInit, OnChanges {
   @Input() users: User[];
-  @Output() editUser = new EventEmitter();
+  @Output() modifyUser = new EventEmitter();
   @Output() editUserPermissions = new EventEmitter();
   @Output() delete = new EventEmitter();
 
@@ -35,8 +35,8 @@ export class UserListComponent implements OnInit, OnChanges {
     }
   }
 
-  async onEditUser(user: User): Promise<void> {
-    await this.editUser.emit(user);
+  async onModifyUser(user: User): Promise<void> {
+    await this.modifyUser.emit(user);
   }
 
   async onEditUserPermissions(user: User): Promise<void> {

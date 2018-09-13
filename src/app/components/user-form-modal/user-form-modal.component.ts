@@ -18,6 +18,8 @@ export class UserFormModalComponent implements OnInit {
   @Input() user: User = new User();
   @Input() editMode = false;
 
+  readonly ONLY_LETTERS_PATTERN = /^[a-zA-Z]+$/;
+
   form: FormGroup;
   permissionValues = Object.keys(constants.PERMISSIONS);
   permissionNames = Object.values(constants.PERMISSIONS);
@@ -54,7 +56,13 @@ export class UserFormModalComponent implements OnInit {
   }
 
   onReset() {
-    this.form.reset();
+    const permissions = this.permissionValues.map((value) =>  {
+      return this.user.permissions[value] === 'true';
+    });
+
+    this.form.reset({
+      permissions: permissions
+    });
   }
 
   onSubmit() {
@@ -81,11 +89,17 @@ export class UserFormModalComponent implements OnInit {
     this.form = this.formBuilder.group({
       'firstname': [
         this.user.firstname.trim(),
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(this.ONLY_LETTERS_PATTERN)
+        ]
       ],
       'lastname': [
         this.user.lastname.trim(),
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(this.ONLY_LETTERS_PATTERN)
+        ]
       ],
       'email': [
         this.user.email.trim(),
