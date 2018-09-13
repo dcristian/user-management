@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 
@@ -35,6 +35,10 @@ export class UserPermissionsFormModalComponent implements OnInit {
     const user = this.createUserByForm();
 
     this.activeModal.close(user);
+  }
+
+  get formPermissions(): FormArray {
+    return <FormArray>this.form.get('permissions');
   }
 
   private buildForm(): void {

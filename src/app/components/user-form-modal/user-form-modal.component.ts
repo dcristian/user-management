@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbDate, NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 import { User } from '../../models/user';
@@ -49,6 +49,10 @@ export class UserFormModalComponent implements OnInit {
 
   get birthdate(): AbstractControl {
     return this.form.get('birthdate');
+  }
+
+  get formPermissions(): FormArray {
+    return <FormArray>this.form.get('permissions');
   }
 
   onClose() {
