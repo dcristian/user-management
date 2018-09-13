@@ -1,0 +1,16 @@
+.custom-header {
+  cursor: pointer;
+}
+
+.fa-sort:before {
+  color: lightgrey;
+  margin-right: 3px;
+}
+
+.fa-sort-asc:before {
+  margin-right: 3px;
+}
+
+.fa-sort-desc:before {
+  margin-right: 3px;
+}

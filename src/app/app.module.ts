@@ -12,6 +12,7 @@ import { UserFormModalComponent } from './components/user-form-modal/user-form-m
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserPermissionsFormModalComponent } from './components/user-permissions-form-modal/user-permissions-form-modal.component';
+import { SortableColumnComponent } from './components/sortable-column/sortable-column.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { UserPermissionsFormModalComponent } from './components/user-permissions
     UserFormModalComponent,
     ConfirmationModalComponent,
     UserListComponent,
-    UserPermissionsFormModalComponent
+    UserPermissionsFormModalComponent,
+    SortableColumnComponent
   ],
   imports: [
     BrowserModule,

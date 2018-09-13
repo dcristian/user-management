@@ -22,8 +22,12 @@ export class UserListComponent implements OnInit, OnChanges {
   currentPage: User[] = [];
   pageSize = this.tableSizes[0];
   pageNumber = 1;
-  searchBox = '';
-  status = '';
+  emailSearchBox = '';
+  statusSelect = '';
+  sortDetails = {
+    sortColumn: 'firstname',
+    sortDirection: 'asc'
+  };
 
   ngOnInit() {
     this.calculateCurrentPage();
@@ -55,14 +59,7 @@ export class UserListComponent implements OnInit, OnChanges {
     this.currentPage = this.pages[this.pageNumber - 1];
   }
 
-  getUserPermissions(user: User): string {
-    return Object.keys(user.permissions)
-      .filter((p) => user.permissions[p] === 'true')
-      .map((p) => this.permissions[p])
-      .join(', ');
-  }
-
-  searchByEmail() {
+  onSearchByEmail() {
     this.calculateCurrentPage();
   }
 
@@ -70,17 +67,51 @@ export class UserListComponent implements OnInit, OnChanges {
     this.calculateCurrentPage();
   }
 
-  calculateCurrentPage(): void {
+  onSort(column: string) {
+    let direction = this.getNewSortDirection(column);
+    this.sortDetails = {
+      sortColumn: column,
+      sortDirection: direction
+    };
+
+    this.calculateCurrentPage();
+  }
+
+  getUserPermissions(user: User): string {
+    return Object.keys(user.permissions)
+      .filter((p) => user.permissions[p] === 'true')
+      .map((p) => this.permissions[p])
+      .join(', ');
+  }
+
+  private calculateCurrentPage(): void {
     // apply the filters
     this.filteredUsers = this.users.filter((user) => {
-      return (!this.searchBox || _.includes(user.email, this.searchBox))
-        && (!this.status || user.active === this.status.toString());
+      return (!this.emailSearchBox || _.includes(user.email, this.emailSearchBox))
+        && (!this.statusSelect || user.active === this.statusSelect.toString());
     });
+
+    // sort the list
+    this.filteredUsers = this.sortDetails.sortDirection === 'asc' ?
+      _.sortBy(this.filteredUsers, this.sortDetails.sortColumn) :
+      _.sortBy(this.filteredUsers, this.sortDetails.sortColumn).reverse();
 
     // split the list into pages
     this.pages = _.chunk(this.filteredUsers, this.pageSize);
 
     // get the current page
     this.currentPage = this.pages[this.pageNumber - 1];
+  }
+
+  private getNewSortDirection(column: string) {
+    if (column !== this.sortDetails.sortColumn) {
+      return 'asc';
+    }
+
+    if (this.sortDetails.sortDirection === 'asc') {
+      return 'desc';
+    }
+
+    return 'asc';
   }
 }
