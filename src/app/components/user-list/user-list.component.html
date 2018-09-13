@@ -1,30 +1,40 @@
 <div>
   <div class="row">
-    <div class="col-6">
-      <label class="form-inline">
-        Show&nbsp;
-        <select class="form-control" [(ngModel)]="pageSize" (change)="onMaxSizeChange()">
+    <div class="col-md-6 col-sm-12">
+      <label>
+        Show
+        <select class="custom-select custom-select-sm form-control form-control-sm" [(ngModel)]="pageSize" (change)="onMaxSizeChange()">
           <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
         </select>
-        &nbsp;Entries
+        Entries
       </label>
     </div>
 
-    <div class="col-3">
-      <input type="text" class="form-control mb-3" placeholder="Search by email"
-             [(ngModel)]="searchBox"
-             (keyup)="searchByEmail()"
-      >
+    <div class="col-md-3 col-sm-12 pr-md-0">
+      <div class="input-group input-group-sm mb-3">
+        <input type="text" class="form-control" placeholder="Search by email"
+               [(ngModel)]="searchBox"
+               (keyup)="searchByEmail()"
+        >
+        <div class="input-group-append">
+          <label class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></label>
+        </div>
+      </div>
     </div>
 
-    <div class="col-3 input-group mb-3">
-      <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="status" (change)="onStatusChange()">
-        <option value="">Choose...</option>
-        <option value="true">Active</option>
-        <option value="false">Inactive</option>
-      </select>
-      <div class="input-group-append">
-        <label class="input-group-text" for="inputGroupSelect01">Status</label>
+    <div class="col-md-3 col-sm-12">
+      <div class="input-group input-group-sm mb-3">
+        <select class="custom-select form-control custom-select-sm form-control-sm" id="statusSelect" aria-label="Small"
+                [(ngModel)]="status"
+                (change)="onStatusChange()"
+        >
+          <option value="">Choose...</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
+        <div class="input-group-append">
+          <label class="input-group-text" for="statusSelect">Status</label>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +47,7 @@
         <th scope="col">First Name</th>
         <th scope="col">Last Name</th>
         <th scope="col">Email</th>
-        <th scope="col">Birthday</th>
+        <th scope="col" class="d-none d-sm-none d-md-table-cell">Birthdate</th>
         <th scope="col">Status</th>
         <th scope="col">Permissions</th>
         <th scope="col">Actions</th>
@@ -49,7 +59,7 @@
         <td>{{ user.firstname }}</td>
         <td>{{ user.lastname }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.birthdate }}</td>
+        <td class="text-nowrap d-none d-sm-none d-md-table-cell">{{ user.birthdate }}</td>
         <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
         <td>{{ getUserPermissions(user) }}</td>
         <td>

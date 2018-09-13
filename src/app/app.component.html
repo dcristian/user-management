@@ -3,8 +3,10 @@
     <h1>Users</h1>
   </div>
 
-  <div class="mb-3">
-    <button class="btn btn-success" (click)="addNewUser()">Add new user</button>
+  <div class="mb-4">
+    <button class="btn btn-success" (click)="addNewUser()">
+      <i class="fa fa-plus" aria-hidden="true"></i> Add new
+    </button>
   </div>
 
   <user-list [users]="users" (editUser)="onEditUser($event)" (editUserPermissions)="onEditUserPermissions($event)" (delete)="onDelete($event)"></user-list>

@@ -6,7 +6,8 @@ import { constants } from '../../constants';
 
 @Component({
   selector: 'user-list',
-  templateUrl: './user-list.component.html'
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit, OnChanges {
   @Input() users: User[];
