@@ -42,6 +42,7 @@ export class UserPermissionsFormModalComponent implements OnInit {
   }
 
   private buildForm(): void {
+    // array of form controls, one for each of the user permissions
     const permissions = this.permissionValues.map((value) =>  {
       return this.formBuilder.control(this.user.permissions[value] === 'true');
     });
@@ -53,6 +54,10 @@ export class UserPermissionsFormModalComponent implements OnInit {
 
   private createUserByForm(): User {
     let userPermissions = {};
+    /*
+    Creates the user permissions object based on a array of boolean values
+    Each index of this array corresponds to a permission value in this.permissions
+    */
     this.form.get('permissions').value.map((value, i) => {
       userPermissions[this.permissionValues[i]] = value.toString();
     });

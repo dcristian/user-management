@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import { User } from '../../models/user';
 import { constants } from '../../constants';
+import { SortDetails } from '../../models/sort-details';
 
 @Component({
   selector: 'user-list',
@@ -24,7 +25,7 @@ export class UserListComponent implements OnInit, OnChanges {
   pageNumber = 1;
   emailSearchBox = '';
   statusSelect = '';
-  sortDetails = {
+  sortDetails: SortDetails = {
     sortColumn: 'firstname',
     sortDirection: 'asc'
   };

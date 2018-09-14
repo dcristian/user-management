@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SortDetails } from '../../models/sort-details';
 
 @Component({
   selector: 'sortable-column',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class SortableColumnComponent {
   @Input() columnName: string;
-  @Input() sortDetails: any;
+  @Input() sortDetails: SortDetails;
 }

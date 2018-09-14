@@ -1,15 +1,14 @@
 <div class="custom-header">
-  <i class="fa fa-sort-asc" aria-hidden="true" *ngIf="columnName === sortDetails.sortColumn && sortDetails.sortDirection === 'asc'">
-  </i>
-  <i class="fa fa-sort-desc" aria-hidden="true" *ngIf="columnName === sortDetails.sortColumn && sortDetails.sortDirection === 'desc'">
-  </i>
-  <i class="fa fa-sort" aria-hidden="true" *ngIf="columnName !== sortDetails.sortColumn">
-  </i>
-  <ng-container *ngTemplateOutlet="content"></ng-container>
-</div>
+  <div *ngIf="columnName === sortDetails.sortColumn; then currentColumn else differentColumn"></div>
 
-<ng-template #content>
+  <ng-template #currentColumn>
+    <i class="fa fa-sort-asc" aria-hidden="true" *ngIf="sortDetails.sortDirection === 'asc'"></i>
+    <i class="fa fa-sort-desc" aria-hidden="true" *ngIf="sortDetails.sortDirection === 'desc'"></i>
+  </ng-template>
+
+  <ng-template #differentColumn>
+    <i class="fa fa-sort" aria-hidden="true"></i>
+  </ng-template>
+
   <ng-content></ng-content>
-</ng-template>
-
-
+</div>

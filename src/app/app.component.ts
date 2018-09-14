@@ -10,8 +10,7 @@ import { UserPermissionsFormModalComponent } from './components/user-permissions
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
   users: User[] = [];
@@ -130,7 +129,7 @@ export class AppComponent implements OnInit {
     return await modal.result;
   }
 
-  private async openConfirmationModal(title, message): Promise<boolean> {
+  private async openConfirmationModal(title: string, message: string): Promise<boolean> {
     const modal = this.modalService.open(ConfirmationModalComponent, {
       keyboard: false,
       backdrop: 'static'
@@ -141,7 +140,7 @@ export class AppComponent implements OnInit {
     return await modal.result;
   }
 
-  private displaySuccessNotification(message): void {
+  private displaySuccessNotification(message: string): void {
     this.toastr.success(message, '', {
       closeButton: true,
       tapToDismiss: false
