@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { User } from '../../models/user';
 import { constants } from '../../constants';
+import { UserFormUtility } from '../utilities/user-form-utility';
 
 @Component({
   selector: 'user-modal',
@@ -28,7 +29,8 @@ export class UserFormModalComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private userFormUtility: UserFormUtility
   ) { }
 
   ngOnInit() {
@@ -87,10 +89,7 @@ export class UserFormModalComponent implements OnInit {
   }
 
   private buildForm(): void {
-    // array of form controls, one for each of the user permissions
-    const permissions = this.permissionValues.map((value) =>  {
-      return this.formBuilder.control(this.user.permissions[value] === 'true');
-    });
+    const permissions = this.userFormUtility.getFormPermissions(this.user);
 
     this.form = this.formBuilder.group({
       'firstname': [
@@ -127,23 +126,15 @@ export class UserFormModalComponent implements OnInit {
   }
 
   private createUserByForm(): User {
-    let userPermissions = {};
-    /*
-    Creates the user permissions object based on a array of boolean values
-    Each index of this array corresponds to a permission value in this.permissions
-    */
-    this.form.get('permissions').value.map((value, i) => {
-      userPermissions[this.permissionValues[i]] = value.toString();
-    });
-
     let user = new User();
+
     user.id = this.user.id;
     user.firstname = this.form.get('firstname').value.trim();
     user.lastname = this.form.get('lastname').value.trim();
     user.email = this.form.get('email').value.trim();
     user.birthdate = moment(this.form.get('birthdate').value).format('YYYY-MM-DD');
     user.active = this.form.get('active').value.toString();
-    user.permissions = userPermissions;
+    user.permissions = this.userFormUtility.getUserPermissionByForm(this.form);
 
     return user;
   }

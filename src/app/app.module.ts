@@ -6,8 +6,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppComponent } from './app.component';
 import { UserService } from './services/user.service';
+import { UserFormUtility } from './components/utilities/user-form-utility';
+
+import { AppComponent } from './app.component';
 import { UserFormModalComponent } from './components/user-form-modal/user-form-modal.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { UserListComponent } from './components/user-list/user-list.component';
@@ -33,7 +35,8 @@ import { SortableColumnComponent } from './components/sortable-column/sortable-c
     ToastrModule.forRoot()
   ],
   providers: [
-    UserService
+    UserService,
+    UserFormUtility
   ],
   entryComponents: [
     UserFormModalComponent,
