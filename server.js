@@ -1,14 +1,12 @@
-var host = "127.0.0.1";
-var port = process.env.PORT || 8080;
+const express = require("express");
+const fs = require('fs');
+const bodyParser = require('body-parser');
 
-var express = require("express");
-var fs = require('fs');
+const host = "127.0.0.1";
+const port = process.env.PORT || 8080;
+const dbfile = 'backend/table.json';
 
-
-var app = express();
-
-
-var bodyParser = require('body-parser');
+const app = express();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,16 +16,14 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/dist/user-management/'));
 
-var dbfile = 'backend/table.json';
-
-
 //dummy implementation of unique id
 function getRandomId(keys) {
-    var id = "id_0";
+    let id = "id_0";
 
     while (keys.indexOf(id) > -1) {
        id = 'id_' + (Math.floor(Math.random() * 1000) + 1);
     }
+
     return id;
 }
 
@@ -36,7 +32,7 @@ app.get('/table/user/:id', function (req, res) {
 
     fs.readFile(dbfile, 'utf8', function (err, data) {
         data = JSON.parse(data);
-        var response = data[req.params.id];
+        const response = data[req.params.id];
         res.end(JSON.stringify(response));
     });
 });
@@ -46,7 +42,7 @@ app.get('/table/users', function (req, res) {
 
     fs.readFile(dbfile, 'utf8', function (err, data) {
         data = JSON.parse(data);
-        var response = { rows: data };
+        const response = { rows: data };
 
         res.end(JSON.stringify(response));
     });
@@ -59,7 +55,7 @@ app.post('/table/create/user', function (req, res) {
 
         data = JSON.parse(data);
 
-        var newUser = req.body;
+        const newUser = req.body;
         newUser.id = getRandomId(Object.keys(data));
 
         data[newUser.id] = newUser;
@@ -67,7 +63,7 @@ app.post('/table/create/user', function (req, res) {
         fs.writeFile(dbfile, JSON.stringify(data), function (err) {
             res.end(JSON.stringify({
                 messages: {
-                    success: 'Added new user'
+                    success: 'User added.'
                 }
             }));
         });
@@ -86,7 +82,7 @@ app.put('/table/update/user/:id', function (req, res) {
         fs.writeFile(dbfile, JSON.stringify(data), function (err) {
             res.end(JSON.stringify({
                 messages: {
-                    success: 'Updated user'
+                    success: 'User updated.'
                 }
             }));
         });
@@ -105,7 +101,7 @@ app.delete('/table/delete/user/:id', function (req, res) {
         fs.writeFile(dbfile, JSON.stringify(data), function (err) {
             res.end(JSON.stringify({
                 messages: {
-                    success: 'Removed user'
+                    success: 'User removed.'
                 }
             }));
         });
@@ -118,7 +114,7 @@ app.listen(port, () => {
 
 if (!process.env.HEROKU) {
   console.log('Running server at http://' + host + ':' + port + '/');
-  var opn = require('opn');
+  const opn = require('opn');
 
 // opens the url in the default browser
 // opn('http://' + host + ':' + port + '#TmljJ3MgdGVzdA==');
