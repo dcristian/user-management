@@ -39,3 +39,7 @@ testem.log
 Thumbs.db
 
 /backend/table.json
+
+# Firebase
+.firebase/*
+.firebaserc
