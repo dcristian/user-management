@@ -148,7 +148,7 @@ export class AppComponent implements OnInit {
   }
 
   private displayErrorNotification(): void {
-    this.toastr.error('Something went wrong', '', {
+    this.toastr.error('Something went wrong.', '', {
       closeButton: true,
       tapToDismiss: false
     });
