@@ -18,8 +18,8 @@ $ npm install -g @angular/cli
 $ git clone git@github.com:DCristian/user-management.git
 $ cd user-management
 $ npm install
-$ ng build
-$ node server.js
+$ npm run watch
+$ npm run start # in another terminal
 ```
 
 ## Code scaffolding
