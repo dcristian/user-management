@@ -1,33 +1,17 @@
 <div>
   <div class="row">
-    <div class="col-md-6 col-sm-12">
-      <label>
-        Show
-        <select class="custom-select custom-select-sm form-control form-control-sm"
-                [(ngModel)]="pageSize"
-                (change)="onMaxSizeChange()"
-        >
-          <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
-        </select>
-        Entries
-      </label>
-    </div>
-
-    <div class="col-md-3 col-sm-12 pr-md-0">
-      <div class="input-group input-group-sm mb-3">
+    <div class="col-md-3 col-sm-12 mb-3">
+      <div class="input-group">
         <input type="text" class="form-control" placeholder="Search by email"
                [(ngModel)]="emailSearchBox"
                (keyup)="onSearchByEmail()"
         >
-        <div class="input-group-append">
-          <label class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></label>
-        </div>
       </div>
     </div>
 
-    <div class="col-md-3 col-sm-12">
-      <div class="input-group input-group-sm mb-3">
-        <select class="custom-select form-control custom-select-sm form-control-sm" id="statusSelect" aria-label="Small"
+    <div class="col-md-auto col-sm-12 mb-3 pl-md-0">
+      <div class="input-group">
+        <select class="custom-select form-control" id="statusSelect" aria-label="Small"
                 [(ngModel)]="statusSelect"
                 (change)="onStatusChange()"
         >
@@ -40,57 +24,81 @@
         </div>
       </div>
     </div>
+
+    <div class="col-md-auto col-sm-12 mb-3 ml-auto">
+      <button class="btn btn-primary btn-block" (click)="onAddNewUser()">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add new
+      </button>
+    </div>
   </div>
 
-
-  <table class="table table-bordered">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col" (click)="onSort('firstname')">
-          <sortable-column [columnName]="'firstname'" [sortDetails]="sortDetails">First Name</sortable-column>
-        </th>
-        <th scope="col" (click)="onSort('lastname')">
-          <sortable-column [columnName]="'lastname'" [sortDetails]="sortDetails">Last Name</sortable-column>
-        </th>
-        <th scope="col" (click)="onSort('email')">
-          <sortable-column [columnName]="'email'" [sortDetails]="sortDetails">Email</sortable-column>
-        </th>
-        <th scope="col" class="d-none d-sm-none d-md-table-cell" (click)="onSort('birthdate')">
-          <sortable-column [columnName]="'birthdate'" [sortDetails]="sortDetails">Birthdate</sortable-column>
-        </th>
-        <th scope="col">Status</th>
-        <th scope="col">Permissions</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of currentPage; let i = index">
-        <th scope="row">{{ (pageNumber - 1)*pageSize + i + 1 }}</th>
-        <td>{{ user.firstname }}</td>
-        <td>{{ user.lastname }}</td>
-        <td>{{ user.email }}</td>
-        <td class="text-nowrap d-none d-sm-none d-md-table-cell">{{ user.birthdate }}</td>
-        <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
-        <td>{{ getUserPermissions(user) }}</td>
-        <td>
-          <div ngbDropdown class="d-inline-block">
-            <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownActions">
-              <button class="dropdown-item" (click)="onModifyUser(user)">Modify user</button>
-              <button class="dropdown-item" (click)="onEditUserPermissions(user)">Edit user permissions</button>
-              <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered mb-0">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="text-nowrap" (click)="onSort('firstname')">
+            <sortable-column [columnName]="'firstname'" [sortDetails]="sortDetails">First Name</sortable-column>
+          </th>
+          <th scope="col" class="text-nowrap" (click)="onSort('lastname')">
+            <sortable-column [columnName]="'lastname'" [sortDetails]="sortDetails">Last Name</sortable-column>
+          </th>
+          <th scope="col" (click)="onSort('email')">
+            <sortable-column [columnName]="'email'" [sortDetails]="sortDetails">Email</sortable-column>
+          </th>
+          <th scope="col" (click)="onSort('birthdate')">
+            <sortable-column [columnName]="'birthdate'" [sortDetails]="sortDetails">Birthdate</sortable-column>
+          </th>
+          <th scope="col">Status</th>
+          <th scope="col">Permissions</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr *ngFor="let user of currentPage; let i = index">
+          <th scope="row">{{ (pageNumber - 1)*pageSize + i + 1 }}</th>
+          <td>{{ user.firstname }}</td>
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.email }}</td>
+          <td class="text-nowrap">{{ user.birthdate }}</td>
+          <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
+          <td>{{ getUserPermissions(user) }}</td>
+          <td>
+            <div ngbDropdown [placement]="['bottom-right', 'top-right']" class="d-inline-block">
+              <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownActions">
+                <button class="dropdown-item" (click)="onModifyUser(user)">Modify user</button>
+                <button class="dropdown-item" (click)="onEditUserPermissions(user)">Edit user permissions</button>
+                <button class="dropdown-item" (click)="onDelete(user)">Delete</button>
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <ngb-pagination class="d-flex justify-content-end"
-                  [collectionSize]="filteredUsers.length"
-                  [(page)]="pageNumber"
-                  [pageSize]="pageSize"
-                  (pageChange)="onPageChange()"
-  ></ngb-pagination>
+  <div class="d-flex flex-nowrap justify-content-between p-2 tableFooter">
+    <div class="padding-left-0 flex-shrink-0 mr-2">
+      <label>
+        Show
+        <select class="custom-select custom-select-sm form-control form-control-sm"
+                [(ngModel)]="pageSize"
+                (change)="onMaxSizeChange()"
+        >
+          <option *ngFor="let size of tableSizes" value="{{ size }}">{{ size }}</option>
+        </select>
+        users per page
+      </label>
+    </div>
+
+    <ngb-pagination
+      class="padding-right-0"
+      [collectionSize]="filteredUsers.length"
+      [(page)]="pageNumber"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange()"
+    ></ngb-pagination>
+  </div>
 </div>

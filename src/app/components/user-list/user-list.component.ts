@@ -15,6 +15,7 @@ export class UserListComponent implements OnInit, OnChanges {
   @Output() modifyUser = new EventEmitter();
   @Output() editUserPermissions = new EventEmitter();
   @Output() delete = new EventEmitter();
+  @Output() addNewUser = new EventEmitter();
 
   filteredUsers: User[];
   permissions = constants.PERMISSIONS;
@@ -50,6 +51,10 @@ export class UserListComponent implements OnInit, OnChanges {
 
   async onDelete(user: User): Promise<void> {
     await this.delete.emit(user);
+  }
+
+  async onAddNewUser(): Promise<void> {
+    await this.addNewUser.emit();
   }
 
   onMaxSizeChange() {
