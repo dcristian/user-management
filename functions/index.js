@@ -26,25 +26,6 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/dist/user-management/'));
 
-app.get('/table/user/:id', function (req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  const id = req.params.id;
-  usersDocRef
-    .getById()
-    .doc(id)
-    .get()
-    .then(doc => {
-      if (!doc.exists) {
-        console.log('No such document!');
-      } else {
-        console.log('Document data:', doc.data());
-      }
-    })
-    .catch(err => {
-      console.log('Error getting document', err);
-    });
-});
-
 app.get('/table/users', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
@@ -53,31 +34,25 @@ app.get('/table/users', function (req, res) {
     .then(snapshot => {
       const response = { rows: {} };
 
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      }
-
       snapshot.forEach(doc => {
         response.rows[doc.id] = {...doc.data(), id: doc.id};
       });
 
       res.end(JSON.stringify(response));
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
     });
 });
 
 app.post('/table/create/user', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
+  const data = req.body;
+
   usersDocRef
-    .add(req.body)
-    .then(ref => {
-      console.log('Added document with ID: ', ref.id);
+    .add(data)
+    .then(() => {
       res.end(JSON.stringify({
         messages: {
-          success: 'Added new user'
+          success: 'New user added'
         }
       }));
     });
@@ -87,15 +62,15 @@ app.put('/table/update/user/:id', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   const id = req.params.id;
+  const data = req.body;
 
   usersDocRef
     .doc(id)
-    .update(req.body)
-    .then(ref => {
-      console.log('Updated document with ID: ', ref.id);
+    .update(data)
+    .then(() => {
       res.end(JSON.stringify({
         messages: {
-          success: 'Updated user'
+          success: 'User updated'
         }
       }));
     });
@@ -103,15 +78,19 @@ app.put('/table/update/user/:id', function (req, res) {
 
 app.delete('/table/delete/user/:id', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
+
   const id = req.params.id;
-  usersDocRef.doc(id).delete().then(ref => {
-    console.log('Deleted document with ID: ', ref.id);
-    res.end(JSON.stringify({
-      messages: {
-        success: 'Removed user'
-      }
-    }));
-  });
+
+  usersDocRef
+    .doc(id)
+    .delete()
+    .then(() => {
+      res.end(JSON.stringify({
+        messages: {
+          success: 'User removed'
+        }
+      }));
+    });
 });
 
 exports.app = functions.https.onRequest(app);

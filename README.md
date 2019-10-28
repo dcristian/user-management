@@ -1,8 +1,8 @@
 # User Management
 
-An user management web app build with Angular 6.
+An user management web app build with Angular 6 and Firebase.
 
-Try the demo at [angular-user-management.herokuapp.com](https://angular-user-management.herokuapp.com/ "Title")
+Try the demo at [https://user-management-angular.web.app](https://user-management-angular.web.app "User Management")
 
 ## Quick Start
 
@@ -19,7 +19,7 @@ $ git clone git@github.com:DCristian/user-management.git
 $ cd user-management
 $ npm install
 $ npm run watch
-$ npm run start # in another terminal
+$ firebase serve # in another terminal
 ```
 
 ## Code scaffolding

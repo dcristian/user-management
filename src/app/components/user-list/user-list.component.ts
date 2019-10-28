@@ -93,7 +93,7 @@ export class UserListComponent implements OnInit, OnChanges {
   private calculateCurrentPage(): void {
     // apply the filters
     this.filteredUsers = this.users.filter((user) => {
-      return (!this.emailSearchBox || _.includes(user.email, this.emailSearchBox))
+      return (!this.emailSearchBox || _.includes(user.email.toLowerCase(), this.emailSearchBox.toLowerCase()))
         && (!this.statusSelect || user.active === this.statusSelect.toString());
     });
 
