@@ -1,8 +1,8 @@
 # User Management
 
-A user management web app build with Angular 6 and Typescript.
+A user management web app build with Angular 6.
 
-Try the demo at [angular-user-management.herokuapp.com](https://angular-user-management.herokuapp.com/ "Title")
+Try the demo at [https://user-management-angular.web.app](https://user-management-angular.web.app "User Management")
 
 ## Quick Start
 
