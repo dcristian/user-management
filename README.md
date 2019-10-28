@@ -1,6 +1,6 @@
 # User Management
 
-An user management web app build with Angular 6 and Firebase.
+A user management web app build with Angular 6 and Firebase.
 
 Try the demo at [https://user-management-angular.web.app](https://user-management-angular.web.app "User Management")
 
