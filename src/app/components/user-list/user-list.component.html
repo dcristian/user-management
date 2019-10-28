@@ -65,7 +65,7 @@
           <td>{{ user.active === 'true' ? 'Active' : 'Inactive' }}</td>
           <td>{{ getUserPermissions(user) }}</td>
           <td>
-            <div ngbDropdown [placement]="['bottom-right', 'top-right']" class="d-inline-block">
+            <div ngbDropdown [placement]="['bottom-right', 'top-right']" class="d-inline-block staticDropdown">
               <button class="btn btn-secondary" id="dropdownActions" ngbDropdownToggle>Action</button>
               <div ngbDropdownMenu aria-labelledby="dropdownActions">
                 <button class="dropdown-item" (click)="onModifyUser(user)">Modify user</button>
