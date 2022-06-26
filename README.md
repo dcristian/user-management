@@ -2,8 +2,6 @@
 
 A user management web app build with Angular 6.
 
-Try the demo at [https://user-management-angular.web.app](https://user-management-angular.web.app "User Management")
-
 ## Quick Start
 
 #### Install Angular CLI
